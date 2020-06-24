@@ -1,5 +1,7 @@
 <?php
+
 require_once 'StartUp.php';
+require_once 'Controllers/HomeController.php';
 
 ob_start();
 $core = new StartUp;
@@ -7,6 +9,6 @@ $core->start($_GET);
 $saida = ob_get_contents();
 ob_end_clean();
 
-$tplPronto = str_replace('{{area_dinamica}}', $saida, $template);
-
-echo $tplPronto;
+include("Views/shared/header.php");
+echo $saida;
+include("Views/shared/footer.php");
