@@ -13,7 +13,7 @@ class StartUp
         if (isset($urlGet['pagina'])) {
             $controller = ucfirst($urlGet['pagina'] . 'Controller');
         } else {
-            $controller = 'HomeController';
+            $controller = 'ProfessorController';
         }
 
         if (!class_exists($controller)) {
