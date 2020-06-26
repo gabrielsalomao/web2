@@ -19,7 +19,8 @@ class ProfessorController
             $professores = $this->profApp->getAll();
             include("Views/Professor/Index.php");
         } catch (Exception $e) {
-            echo $e->getMessage();
+            // echo $e->getMessage();
+            include("Views/Professor/Index.php");
         }
     }
 
@@ -71,7 +72,7 @@ class ProfessorController
             $this->profApp->delete($_GET['id']);
             $response = (object) [
                 'success' => true,
-                'message' => 'deletado com sucesso'
+                'message' => 'Deletado com sucesso'
             ];
 
             echo json_encode($response);
@@ -83,6 +84,27 @@ class ProfessorController
             ];
 
             echo json_encode($response);
+        }
+    }
+
+    public function editPost()
+    {
+        try {
+            $professor = new Professor();
+            $professor->id = $_POST['id'];
+            $professor->nome = $_POST['nome'];
+            $professor->titulacao = $_POST['titulacao'];
+            $professor->sexo = $_POST['sexo'];
+            $professor->registro = $_POST['registro'];
+
+            $this->profApp->edit($professor);
+
+            $professores = $this->profApp->getAll();
+
+            header("Location: Index.php");
+        } catch (Exception $e) {
+            echo $e->getMessage();
+            include("Views/Professor/Create.php");
         }
     }
 }

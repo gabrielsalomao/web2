@@ -13,11 +13,10 @@
 <body>
     <nav class="green">
         <div class="nav-wrapper">
-            <a href="index.php" class="brand-logo" style="margin-left: 20px;">Cursos</a>
             <ul id="nav-mobile" class="right hide-on-med-and-down">
-                <li><a href="sass.html">Sass</a></li>
-                <li><a href="badges.html">Components</a></li>
-                <li><a href="collapsible.html">JavaScript</a></li>
+                <li><a href="?pagina=professor&metodo=index">Professores</a></li>
+                <li><a href="?pagina=curso&metodo=index">Cursos</a></li>
+                <li><a href="?pagina=aluno&metodo=index">Alunos</a></li>
             </ul>
         </div>
     </nav>

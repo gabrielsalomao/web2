@@ -11,7 +11,7 @@
                             <label for="nome">Nome</label>
                         </div>
                         <div class="input-field col s6">
-                            <input id="registro" name="registro" type="text" class="validate">
+                            <input id="registro" name="registro" type="number" class="validate">
                             <label for="registro">Registro</label>
                         </div>
                     </div>

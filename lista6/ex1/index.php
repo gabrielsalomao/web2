@@ -2,6 +2,8 @@
 
 require_once 'StartUp.php';
 require_once 'Controllers/ProfessorController.php';
+require_once 'Controllers/CursoController.php';
+require_once 'Controllers/AlunoController.php';
 
 ob_start();
 $core = new StartUp;

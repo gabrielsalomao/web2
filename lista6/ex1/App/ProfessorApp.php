@@ -13,16 +13,14 @@ class ProfessorApp
 
     public function getAll()
     {
-        $conexao = $this->db->getConn();
-
         $sql = "SELECT * FROM professor ORDER BY id DESC";
-        $sql = $conexao->prepare($sql);
-        $sql->execute();
+
+        $resultado = $this->db->executarQuery($sql);
 
         $professores = array();
 
-        while ($row = $sql->fetchObject('Professor')) {
-            $professores[] = $row;
+        while ($professor = $resultado->fetch_object('Professor')) {
+            $professores[] = $professor;
         }
 
         if (!$professores) {
@@ -40,22 +38,14 @@ class ProfessorApp
             return false;
         }
 
-        $conexao = $this->db->getConn();
+        $sql = "INSERT INTO professor (nome, registro, titulacao, sexo)
+                VALUES ('$professor->nome', '$professor->registro',
+                '$professor->titulacao', '$professor->sexo')";
 
-        $sql = 'INSERT INTO professor (nome, registro, titulacao, sexo)
-                VALUES (:nome, :registro, :titulacao, :sexo)';
-
-        $sql = $conexao->prepare($sql);
-
-        $result = $sql->execute(array(
-            ':nome' => $professor->nome,
-            ':registro' => $professor->registro,
-            ':titulacao' => $professor->titulacao,
-            ':sexo' => $professor->sexo
-        ));
+        $result = $this->db->executarQuery($sql);
 
         if ($result == 0) {
-            throw new Exception("Falha ao inserir deletar");
+            throw new Exception("Falha ao inserir professor");
         }
 
         return true;
@@ -63,14 +53,9 @@ class ProfessorApp
 
     public function getById($id)
     {
-        $conexao = $this->db->getConn();
+        $sql = "SELECT * FROM professor where id = $id";
 
-        $sql = "SELECT * FROM professor where id = :id";
-        $sql = $conexao->prepare($sql);
-        $sql->bindValue(':id', (int) $id, PDO::PARAM_INT);
-        $sql->execute();
-
-        $result = $sql->fetchObject('Professor');
+        $result = $this->db->executarQuery($sql)->fetch_object('Professor');
 
         if (!$result) {
             throw new Exception('Não foi encontrado nenhum registro no banco');
@@ -83,20 +68,14 @@ class ProfessorApp
 
     public function edit(Professor $professor)
     {
-        $connection = $this->db->getConn();
+        $sql = "UPDATE professor SET nome = '$professor->nome', 
+                registro = '$professor->registro',
+                sexo = '$professor->sexo', titulacao = '$professor->titulacao'
+                WHERE id = $professor->id";
 
-        $sql = "UPDATE professor set nome = :nome, registro = :registro,
-             sexo = :sexo, titulacao = :titulacao WHERE id = :id";
+        var_dump($sql);
 
-        $sql = $connection->prepare($sql);
-
-        $result = $sql->execute(array(
-            ':id' => $professor->id,
-            ':nome' => $professor->nome,
-            ':registro' => $professor->professor,
-            ':sexo' => $professor->sexo,
-            ':titulacao' => $professor->titulacao
-        ));
+        $result = $this->db->executarQuery($sql);
 
         if ($result == 0) {
             throw new Exception("Erro ao editar professor");
@@ -105,18 +84,12 @@ class ProfessorApp
 
     public function delete($id)
     {
-        $conexao = $this->db->getConn();
+        $sql = "DELETE FROM professor WHERE id = $id";
 
-        $sql = 'DELETE FROM professor WHERE id = :id';
-
-        $sql = $conexao->prepare($sql);
-
-        $erro = $conexao->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
-
-        $result = $sql->execute(array(':id' => (int) $id));
+        $result = $this->db->executarQuery($sql);
 
         if ($result == 0)
-            throw new Exception($erro);
+            throw new Exception("erro");
 
         return true;
     }

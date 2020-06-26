@@ -2,13 +2,15 @@
 
 class Connection
 {
-    private static $conn;
-
-    public function getConn()
+    static  function criarConexao()
     {
-        if (self::$conn == null)
-            self::$conn = new PDO('mysql: host=localhost; dbname=cursos;', 'root', '');
+        return mysqli_connect("localhost", "root", "", "cursos");
+    }
 
-        return self::$conn;
+    function executarQuery($query)
+    {
+        $conexao = self::criarConexao();
+
+        return mysqli_query($conexao, $query);
     }
 }
