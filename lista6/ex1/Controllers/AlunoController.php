@@ -33,13 +33,30 @@ class AlunoController
 
     function createPost()
     {
-        $aluno = new Aluno();
-        $aluno->nome = $_POST['nome'];
-        $aluno->sexo = $_POST['sexo'];
-        $aluno->data_nascimento = $_POST['data_nascimento'];
-        $aluno->registro = $_POST['registro'];
-        $aluno->cursos = $_POST['cursos'];
+        try {
+            $aluno = new Aluno();
+            $aluno->nome = $_POST['nome'];
+            $aluno->sexo = $_POST['sexo'];
+            $aluno->data_nascimento = $_POST['data_nascimento'];
+            $aluno->registro = $_POST['registro'];
+            $aluno->cursos = $_POST['cursos'];
 
-        $this->alunoApp->add($aluno);
+            $this->alunoApp->add($aluno);
+        } catch (Exception $e) {
+            echo $e->getMessage();
+        }
+
+        header("Location: index.php?pagina=aluno&metodo=index");
+    }
+
+    function edit()
+    {
+        $id = $_GET["id"];
+
+        $aluno = $this->alunoApp->obterAlunoPorId($id);
+
+        $cursosDoAluno = $this->alunoApp->obterCursosDoAluno($id);
+
+        include("Views/Aluno/Editar.php");
     }
 }
