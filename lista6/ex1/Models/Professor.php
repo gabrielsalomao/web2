@@ -8,7 +8,7 @@ class Professor
      var $sexo;
      var $titulacao;
 
-     function getSexo()
+     function obterSexo()
      {
           return $this->sexo == "F" ? "Feminino" : "Masculino";
      }

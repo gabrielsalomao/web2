@@ -36,9 +36,20 @@
 
         $('#cursos').val(selectCurso);
 
-        console.log($('#cursos').val());
+        console.log($('#cursosSelect').val());
 
     });
+
+
+
+    <?php if ($_GET['metodo'] == 'editar') { ?>
+        var selectCurso = $('#cursosSelect').val();
+
+        selectCurso = selectCurso.join(',');
+
+        $('#cursos').val(selectCurso);
+
+    <?php } ?>
 </script>
 
 </body>

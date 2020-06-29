@@ -12,7 +12,7 @@ $saida = ob_get_contents();
 ob_end_clean();
 
 
-if (isset($_GET['metodo']) && $_GET['metodo'] == 'delete') {
+if (isset($_GET['metodo']) && $_GET['metodo'] == 'deletar') {
     echo $saida;
 } else {
     include("Views/Shared/Header.php");

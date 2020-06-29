@@ -1,5 +1,5 @@
 <div class="col s12 m7">
-    <form class="col s12" method="post" action="?pagina=curso&metodo=editPost">
+    <form class="col s12" method="post" action="?pagina=curso&metodo=editarPost">
         <input type="hidden" name="id" value="<?= $curso->id ?>">
         <div class="card horizontal">
             <div class="card-stacked">
@@ -7,7 +7,7 @@
                     <h5>Editar curso</h5>
                     <div class="row">
                         <div class="input-field col s6">
-                            <input value="<?= $curso->nome ?>" id="nome" name="nome" type="text" class="validate">
+                            <input required value="<?= $curso->nome ?>" id="nome" name="nome" type="text" class="validate">
                             <label for="nome">Nome</label>
                         </div>
                         <div class="input-field col s6">

@@ -18,39 +18,39 @@ class CursoController
     public function index()
     {
         try {
-            $cursos = $this->cursoApp->getAll();
+            $cursos = $this->cursoApp->obterTodos();
             include("Views/Curso/Index.php");
         } catch (Exception $e) {
             include("Views/Curso/Index.php");
         }
     }
 
-    public function create()
+    public function cadastrar()
     {
         try {
-            $professores = $this->profApp->getAll();
-            include("Views/Curso/Create.php");
+            $professores = $this->profApp->obterTodos();
+            include("Views/Curso/Cadastrar.php");
         } catch (Exception $e) {
             echo $e->getMessage();
         }
     }
 
-    public function edit()
+    public function editar()
     {
         try {
             $id = $_GET['id'];
 
-            $curso = $this->cursoApp->getById($id);
+            $curso = $this->cursoApp->obterPorId($id);
 
-            $professores = $this->profApp->getAll();
+            $professores = $this->profApp->obterTodos();
 
-            include("Views/Curso/Edit.php");
+            include("Views/Curso/Editar.php");
         } catch (Exception $e) {
             echo $e->getMessage();
         }
     }
 
-    public function editPost()
+    public function editarPost()
     {
         try {
             $curso = new Curso();
@@ -58,9 +58,9 @@ class CursoController
             $curso->nome = $_POST['nome'];
             $curso->professor = $_POST['professor'];
 
-            $this->cursoApp->edit($curso);
+            $this->cursoApp->editar($curso);
 
-            $cursos = $this->cursoApp->getAll();
+            $cursos = $this->cursoApp->obterTodos();
 
             header("Location: index.php?pagina=curso&metodo=index");
         } catch (Exception $e) {
@@ -68,16 +68,16 @@ class CursoController
         }
     }
 
-    public function createPost()
+    public function cadastrarPost()
     {
         try {
             $curso = new Curso();
             $curso->nome = $_POST['nome'];
-            $curso->professor = $this->profApp->getById((int) $_POST['professor']);
+            $curso->professor = $this->profApp->obterPorId((int) $_POST['professor']);
 
-            $this->cursoApp->add($curso);
+            $this->cursoApp->cadastrar($curso);
 
-            $cursos = $this->cursoApp->getAll();
+            $cursos = $this->cursoApp->obterTodos();
 
             header("Location: index.php?pagina=curso&metodo=index");
         } catch (Exception $e) {
@@ -85,10 +85,10 @@ class CursoController
         }
     }
 
-    function delete()
+    function deletar()
     {
         try {
-            $this->cursoApp->delete($_GET['id']);
+            $this->cursoApp->deletar($_GET['id']);
             $response = (object) [
                 'success' => true,
                 'message' => 'deletado com sucesso'

@@ -14,18 +14,18 @@ class CursoApp
         $this->profApp = new ProfessorApp();
     }
 
-    public function getAll()
+    public function obterTodos()
     {
         $sql = "SELECT c.id id, c.nome nome, p.id professor 
                 FROM curso c JOIN professor p
-                ON c.professor = p.id";
+                ON c.professor = p.id ORDER BY id DESC";
 
         $resultado = $this->db->executarQuery($sql);
 
         $cursos = array();
 
         while ($row = $resultado->fetch_object('Curso')) {
-            $row->professor = $this->profApp->getById($row->professor);
+            $row->professor = $this->profApp->obterPorId($row->professor);
             $cursos[] = $row;
         }
 
@@ -36,56 +36,56 @@ class CursoApp
         return $cursos;
     }
 
-    public function add(Curso $curso)
+    public function cadastrar(Curso $curso)
     {
         $sql = "INSERT INTO curso (nome, professor)
                 VALUES ('$curso->nome', " . $curso->professor->id . ")";
 
-        $result = $this->db->executarQuery($sql);
+        $resultado = $this->db->executarQuery($sql);
 
-        if ($result == 0) {
-            throw new Exception("Falha ao inserir curso");
+        if ($resultado == 0) {
+            throw new Exception("falha ao cadastrar");
         }
 
         return true;
     }
 
 
-    public function getById($id)
+    public function obterPorId($id)
     {
         $sql = "SELECT * FROM curso WHERE id = $id ";
 
-        $result = $this->db->executarQuery($sql);
+        $resultado = $this->db->executarQuery($sql);
 
-        $curso = $result->fetch_object("Curso");
+        $curso = $resultado->fetch_object("Curso");
 
         if (!isset($curso))
-            throw new Exception("erro");
+            throw new Exception("falha ao obter por id");
 
         return $curso;
     }
 
-    public function edit(Curso $curso)
+    public function editar(Curso $curso)
     {
         $sql = "UPDATE curso SET nome = '$curso->nome',
                 professor = " . $curso->professor . " WHERE id = $curso->id";
 
-        $result = $this->db->executarQuery($sql);
+        $resultado = $this->db->executarQuery($sql);
 
-        if ($result == 0)
-            throw new Exception("erro");
+        if ($resultado == 0)
+            throw new Exception("falha ao editar curso");
 
         return true;
     }
 
-    public function delete($id)
+    public function deletar($id)
     {
         $sql = "DELETE FROM curso WHERE id = $id";
 
-        $result = $this->db->executarQuery($sql);
+        $resultado = $this->db->executarQuery($sql);
 
-        if ($result == 0)
-            throw new Exception("erro");
+        if ($resultado == 0)
+            throw new Exception("falha ao deletar curso");
 
         return true;
     }

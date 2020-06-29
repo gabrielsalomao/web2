@@ -9,14 +9,14 @@ class Aluno
     var $registro;
     var $cursos;
 
-    function getSexo()
+    function obterSexo()
     {
         return $this->sexo == "F" ? "Feminino" : "Masculino";
     }
 
-    function getDataFormatada()
+    function obterDataFormatada()
     {
-        $date = new DateTime($this->data_nascimento);
-        echo $date->format('d/m/Y');
+        $data = new DateTime($this->data_nascimento);
+        echo $data->format('d/m/Y');
     }
 }

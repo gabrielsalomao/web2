@@ -1,5 +1,5 @@
 <div class="col s12 m7">
-    <form class="col s12" method="post" action="?pagina=curso&metodo=createPost">
+    <form class="col s12" method="post" action="?pagina=curso&metodo=cadastrarPost">
 
         <div class="card horizontal">
             <div class="card-stacked">
@@ -7,7 +7,7 @@
                     <h5>Cadastrar curso</h5>
                     <div class="row">
                         <div class="input-field col s6">
-                            <input id="nome" name="nome" type="text" class="validate">
+                            <input required id="nome" name="nome" type="text" class="validate">
                             <label for="nome">Nome</label>
                         </div>
                         <div class="input-field col s6">

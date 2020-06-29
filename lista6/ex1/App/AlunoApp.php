@@ -13,20 +13,20 @@ class AlunoApp
         $this->db = new Connection();
     }
 
-    function getAll()
+    function obterTodos()
     {
-        $sql = "SELECT * FROM aluno";
+        $sql = "SELECT * FROM aluno ORDER BY id DESC";
 
-        $result = $this->db->executarQuery($sql);
+        $resultado = $this->db->executarQuery($sql);
 
         $alunos = array();
 
-        while ($aluno = $result->fetch_object("Aluno")) {
+        while ($aluno = $resultado->fetch_object("Aluno")) {
             $alunos[] = $aluno;
         }
 
         if ($alunos == 0) {
-            throw new Exception("erro");
+            throw new Exception("falha ao obter alunos");
         }
 
         return $alunos;
@@ -47,10 +47,6 @@ class AlunoApp
             $cursos[] = $row;
         }
 
-        if (!$cursos) {
-            throw new Exception('Não foi encontrado nenhum registro no banco');
-        }
-
         return $cursos;
     }
 
@@ -61,12 +57,12 @@ class AlunoApp
         $aluno = $this->db->executarQuery($sql)->fetch_object('Aluno');
 
         if (empty($aluno))
-            throw new Exception("nenhum aluno encontrado");
+            throw new Exception("falha ao obter aluno por id");
 
         return $aluno;
     }
 
-    static function addCursosDoAluno($alunoId, $cursos)
+    static function cadastrarCursosDoAluno($alunoId, $cursos)
     {
         $db =  new Connection();
 
@@ -74,14 +70,12 @@ class AlunoApp
             $sql = "INSERT INTO curso_aluno (curso, aluno) 
                     VALUES ($cursoId, $alunoId)";
 
-            $result = $db->executarQuery($sql);
+            $resultado = $db->executarQuery($sql);
 
-            if ($result == 0) {
-                throw new Exception("erro");
+            if ($resultado == 0) {
+                throw new Exception("falha ao cadastrar curso do aluno");
             }
         }
-
-        return true;
     }
 
     static function obterUltimoAluno()
@@ -90,23 +84,27 @@ class AlunoApp
 
         $db =  new Connection();
 
-        $result = $db->executarQuery($sql)->fetch_object('Aluno');
+        $resultado = $db->executarQuery($sql)->fetch_object('Aluno');
 
-        if (empty($result))
-            throw new Exception("erro");
+        if (empty($resultado))
+            throw new Exception("falha ao obter ultimo aluno");
 
-        return $result;
+        return $resultado;
     }
 
-    function add(Aluno $aluno)
+    function cadastrar(Aluno $aluno)
     {
+        $dt = \DateTime::createFromFormat('d/m/Y', $aluno->data_nascimento);
+
+        $dataFormatada = $dt->format('Y-m-d');
+
         $sql = "INSERT INTO aluno (nome, sexo, data_nascimento, registro)
-                VALUES ('$aluno->nome', '$aluno->sexo','$aluno->data_nascimento', $aluno->registro)";
+                VALUES ('$aluno->nome', '$aluno->sexo','$dataFormatada', $aluno->registro)";
 
-        $result = $this->db->executarQuery($sql);
+        $resultado = $this->db->executarQuery($sql);
 
-        if ($result == 0) {
-            throw new Exception("erro");
+        if ($resultado == 0) {
+            throw new Exception("falha ao cadastrar aluno");
         }
 
         if (!empty($aluno->cursos)) {
@@ -114,9 +112,57 @@ class AlunoApp
 
             $cursoIds = explode(",", $aluno->cursos);
 
-            self::addCursosDoAluno($ultimoAluno->id, $cursoIds);
+            self::cadastrarCursosDoAluno($ultimoAluno->id, $cursoIds);
         }
 
         return true;
+    }
+
+    function editar(Aluno $aluno)
+    {
+        try {
+            $sql = "DELETE FROM curso_aluno WHERE aluno = $aluno->id";
+
+            $this->db->executarQuery($sql);
+
+            if (!empty($aluno->cursos)) {
+                $cursoIds = explode(",", $aluno->cursos);
+
+                self::cadastrarCursosDoAluno($aluno->id, $cursoIds);
+            }
+
+            $dt = \DateTime::createFromFormat('d/m/Y', $aluno->data_nascimento);
+
+            $dataFormatada = $dt->format('Y-m-d');
+
+            $sql = "UPDATE aluno SET nome = '$aluno->nome', sexo = '$aluno->sexo',
+                    data_nascimento = '$dataFormatada', registro = $aluno->registro
+                    WHERE id = $aluno->id";
+
+            $resultado = $this->db->executarQuery($sql);
+
+            if ($resultado == 0)
+                throw new Exception("erro ao editar aluno");
+        } catch (Exception $e) {
+            echo "erro";
+        }
+    }
+
+    public function deletar($id)
+    {
+        $sql = "DELETE FROM curso_aluno WHERE aluno = $id";
+
+        $result = $this->db->executarQuery($sql);
+
+        if ($result == 0) {
+            throw new Exception("erro ao deletar");
+        } else {
+            $sql = "DELETE FROM aluno WHERE id = $id";
+
+            $result = $this->db->executarQuery($sql);
+
+            if ($result == 0)
+                throw new Exception("erro ao deletar aluno");
+        }
     }
 }

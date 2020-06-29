@@ -16,37 +16,36 @@ class ProfessorController
     public function index()
     {
         try {
-            $professores = $this->profApp->getAll();
+            $professores = $this->profApp->obterTodos();
             include("Views/Professor/Index.php");
         } catch (Exception $e) {
-            // echo $e->getMessage();
             include("Views/Professor/Index.php");
         }
     }
 
-    public function create()
+    public function cadastrar()
     {
         try {
-            include("Views/Professor/Create.php");
+            include("Views/Professor/Cadastrar.php");
         } catch (Exception $e) {
             echo $e->getMessage();
         }
     }
 
-    public function edit()
+    public function editar()
     {
         try {
             $id = $_GET['id'];
 
-            $professor = $this->profApp->getById($id);
+            $professor = $this->profApp->obterPorId($id);
 
-            include("Views/Professor/Edit.php");
+            include("Views/Professor/Editar.php");
         } catch (Exception $e) {
             echo $e->getMessage();
         }
     }
 
-    public function createPost()
+    public function cadastrarPost()
     {
         try {
             $professor = new Professor();
@@ -55,21 +54,21 @@ class ProfessorController
             $professor->sexo = $_POST['sexo'];
             $professor->registro = $_POST['registro'];
 
-            $this->profApp->add($professor);
+            $this->profApp->cadastrar($professor);
 
-            $professores = $this->profApp->getAll();
+            $professores = $this->profApp->obterTodos();
 
             header("Location: Index.php");
         } catch (Exception $e) {
             echo $e->getMessage();
-            include("Views/Professor/Create.php");
+            include("Views/Professor/Cadastrar.php");
         }
     }
 
-    function delete()
+    function deletar()
     {
         try {
-            $this->profApp->delete($_GET['id']);
+            $this->profApp->deletar($_GET['id']);
             $response = (object) [
                 'success' => true,
                 'message' => 'Deletado com sucesso'
@@ -87,7 +86,7 @@ class ProfessorController
         }
     }
 
-    public function editPost()
+    public function editarPost()
     {
         try {
             $professor = new Professor();
@@ -97,14 +96,14 @@ class ProfessorController
             $professor->sexo = $_POST['sexo'];
             $professor->registro = $_POST['registro'];
 
-            $this->profApp->edit($professor);
+            $this->profApp->editar($professor);
 
-            $professores = $this->profApp->getAll();
+            $professores = $this->profApp->obterTodos();
 
             header("Location: Index.php");
         } catch (Exception $e) {
             echo $e->getMessage();
-            include("Views/Professor/Create.php");
+            include("Views/Professor/Cadastrar.php");
         }
     }
 }

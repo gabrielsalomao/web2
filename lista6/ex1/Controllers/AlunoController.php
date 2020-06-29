@@ -16,7 +16,7 @@ class AlunoController
     function index()
     {
         try {
-            $alunos = $this->alunoApp->getAll();
+            $alunos = $this->alunoApp->obterTodos();
 
             include("Views/Aluno/Index.php");
         } catch (Exception $e) {
@@ -24,14 +24,14 @@ class AlunoController
         }
     }
 
-    function create()
+    function cadastrar()
     {
-        $cursos = $this->cursoApp->getAll();
+        $cursos = $this->cursoApp->obterTodos();
 
-        include("Views/Aluno/Create.php");
+        include("Views/Aluno/Cadastrar.php");
     }
 
-    function createPost()
+    function cadastrarPost()
     {
         try {
             $aluno = new Aluno();
@@ -41,7 +41,7 @@ class AlunoController
             $aluno->registro = $_POST['registro'];
             $aluno->cursos = $_POST['cursos'];
 
-            $this->alunoApp->add($aluno);
+            $this->alunoApp->cadastrar($aluno);
         } catch (Exception $e) {
             echo $e->getMessage();
         }
@@ -49,7 +49,7 @@ class AlunoController
         header("Location: index.php?pagina=aluno&metodo=index");
     }
 
-    function edit()
+    function editar()
     {
         $id = $_GET["id"];
 
@@ -57,6 +57,48 @@ class AlunoController
 
         $cursosDoAluno = $this->alunoApp->obterCursosDoAluno($id);
 
+        $cursos = $this->cursoApp->obterTodos();
+
         include("Views/Aluno/Editar.php");
+    }
+
+    function editarPost()
+    {
+        try {
+            $aluno = new Aluno();
+            $aluno->id = $_POST['id'];
+            $aluno->nome = $_POST['nome'];
+            $aluno->sexo = $_POST['sexo'];
+            $aluno->data_nascimento = $_POST['data_nascimento'];
+            $aluno->registro = $_POST['registro'];
+            $aluno->cursos = $_POST['cursos'];
+
+            $this->alunoApp->editar($aluno);
+        } catch (Exception $e) {
+            echo $e->getMessage();
+        }
+
+        header("Location: index.php?pagina=aluno&metodo=index");
+    }
+
+    function deletar()
+    {
+        try {
+            $this->alunoApp->deletar($_GET['id']);
+            $response = (object) [
+                'success' => true,
+                'message' => 'deletado com sucesso'
+            ];
+
+            echo json_encode($response);
+        } catch (Exception $e) {
+
+            $response = (object) [
+                'success' => false,
+                'message' => $e->getMessage()
+            ];
+
+            echo json_encode($response);
+        }
     }
 }

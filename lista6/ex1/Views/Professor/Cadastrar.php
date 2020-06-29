@@ -1,5 +1,5 @@
 <div class="col s12 m7">
-    <form class="col s12" method="post" action="?pagina=professor&metodo=createPost">
+    <form class="col s12" method="post" action="?pagina=professor&metodo=cadastrarPost">
 
         <div class="card horizontal">
             <div class="card-stacked">
@@ -7,17 +7,17 @@
                     <h5>Cadastrar professor</h5>
                     <div class="row">
                         <div class="input-field col s6">
-                            <input id="nome" name="nome" type="text" class="validate">
+                            <input required id="nome" name="nome" type="text" class="validate">
                             <label for="nome">Nome</label>
                         </div>
                         <div class="input-field col s6">
-                            <input id="registro" name="registro" type="number" class="validate">
+                            <input required id="registro" name="registro" type="number" class="validate">
                             <label for="registro">Registro</label>
                         </div>
                     </div>
                     <div class="row">
                         <div class="input-field col s6">
-                            <input id="titulacao" name="titulacao" type="text" class="validate">
+                            <input required id="titulacao" name="titulacao" type="text" class="validate">
                             <label for="titulacao">Titulação</label>
                         </div>
                         <div class="input-field col s6">
