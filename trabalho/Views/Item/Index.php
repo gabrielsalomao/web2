@@ -20,7 +20,7 @@
         ?>
                 <div class="col-md-4" style="margin-bottom: 1rem;">
                     <div class="card">
-                        <img src="https://i.imgur.com/VUEGlFp.jpeg" class="card-img-top" alt="...">
+                        <img src="<?= $item->imagem == null ? "Imagens/default.jpg" : $item->imagem ?>" class="card-img-top" alt="...">
                         <div class="card-body">
                             <h5 class="card-title"><?= $item->nome ?></h5>
                             <p class="card-text"><?= $item->observacao ?></p>
@@ -29,14 +29,14 @@
                             <li class="list-group-item"><strong>Preço:</strong> R$ <?= $item->preco ?></li>
                         </ul>
                         <div class="card-body">
-                            <a href="#" class="btn btn-primary">
+                            <a href="index.php?pagina=item&metodo=editar&id=<?= $item->id ?>" class="btn btn-primary">
                                 <span data-octicon="pencil"></span>
                                 Editar
                             </a>
-                            <a href="#" class="btn btn-danger">
+                            <button href="#" id="<?= $item->id ?>" onclick="deletarItem(this.id)" class="btn btn-danger">
                                 <span data-octicon="trashcan"></span>
                                 Deletar
-                            </a>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -46,3 +46,18 @@
         ?>
     </div>
 </div>
+
+<script>
+    function deletarItem(id) {
+        axios.get(`?pagina=item&metodo=deletar&id=${id}`).then((response) => {
+            if (response.data.success == true) {
+                alert(response.data.message);
+                location.reload();
+            } else {
+                alert(response.data);
+            }
+        }).catch((erro) => {
+            alert(erro)
+        });
+    }
+</script>

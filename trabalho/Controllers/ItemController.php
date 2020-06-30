@@ -33,6 +33,39 @@ class ItemController
         }
     }
 
+    public function editar()
+    {
+        try {
+            $item = $this->itemApp->obterPorId($_GET["id"]);
+
+            include("Views/Item/Editar.php");
+        } catch (Exception $e) {
+            echo $e->getMessage();
+        }
+    }
+
+    public function editarPost()
+    {
+        try {
+            $item = new Item();
+            $item->id = $_POST["id"];
+            $item->nome = $_POST["nome"];
+            $item->preco = $_POST["preco"];
+            $item->observacao = $_POST["observacao"];
+
+            if (!empty($_FILES['imagem']['name'])) {
+                $item->imagem = "Imagens/" . time() . basename($_FILES['imagem']['name']);
+                if (!move_uploaded_file($_FILES['imagem']['tmp_name'], $item->imagem))
+                    throw new Exception("falha ao fazer upload de imagem");
+            }
+
+            $this->itemApp->editar($item);
+            Header("Location: index.php?pagina=item&metodo=index");
+        } catch (Exception $e) {
+            echo $e->getMessage();
+        }
+    }
+
     public function cadastrarPost()
     {
         try {
@@ -41,13 +74,41 @@ class ItemController
             $item->observacao = $_POST["observacao"];
             $item->preco = $_POST["preco"];
 
-            $itens = $this->itemApp->obterTodos();
+            if (!empty($_FILES['imagem']['name'])) {
+                $item->imagem = "Imagens/" . time() . basename($_FILES['imagem']['name']);
+                if (!move_uploaded_file($_FILES['imagem']['tmp_name'], $item->imagem))
+                    throw new Exception("falha ao fazer upload de imagem");
+            }
 
             $this->itemApp->cadastrar($item);
+
+            $itens = $this->itemApp->obterTodos();
 
             Header("Location: index.php?pagina=item&metodo=index");
         } catch (Exception $e) {
             echo $e->getMessage();
+        }
+    }
+
+    public function deletar()
+    {
+        try {
+            $id = (int) $_GET["id"];
+            $this->itemApp->deletar($id);
+
+            $response = (object) [
+                'success' => true,
+                'message' => 'Deletado com sucesso'
+            ];
+
+            echo json_encode($response);
+        } catch (Exception $e) {
+            $response = (object) [
+                'success' => false,
+                'message' => $e->getMessage()
+            ];
+
+            echo json_encode($response);
         }
     }
 }

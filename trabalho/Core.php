@@ -13,7 +13,7 @@ class Core
         if (isset($urlGet['pagina'])) {
             $controller = ucfirst($urlGet['pagina'] . 'Controller');
         } else {
-            $controller = 'ItemController';
+            $controller = 'ComandaController';
         }
 
         if (!class_exists($controller)) {
