@@ -11,7 +11,8 @@ $core->start($_GET);
 $saida = ob_get_contents();
 ob_end_clean();
 
-if (isset($_GET['metodo']) && $_GET['metodo'] == 'deletar') {
+// para fazer request json não criar partials
+if (isset($_GET['metodo']) && ($_GET['metodo'] == 'deletar' || $_GET['metodo'] == 'obterTodos')) {
     echo $saida;
 } else {
     include("Views/Shared/Header.php");

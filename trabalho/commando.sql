@@ -55,7 +55,8 @@ CREATE TABLE `item` (
   `id` int(11) NOT NULL,
   `nome` varchar(200) NOT NULL,
   `observacao` text NOT NULL,
-  `preco` decimal(10,0) NOT NULL
+  `preco` decimal(10,0) NOT NULL,
+  `imagem` varchar(1000) NOT NULL,
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------

@@ -13,6 +13,17 @@ class ItemController
         $this->itemApp = new ItemApp();
     }
 
+    public function obterTodos()
+    {
+        try {
+            $itens = $this->itemApp->obterTodos();
+
+            echo json_encode($itens);
+        } catch (Exception $e) {
+            echo $e->getMessage();
+        }
+    }
+
     public function index()
     {
         try {
