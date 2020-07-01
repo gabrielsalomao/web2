@@ -12,11 +12,7 @@
                     <div class="form-group col-md-6">
                         <label for="item">Item</label>
                         <select class="form-control" id="comandaItens" name="comandaItens">
-                            <option value="10">1</option>
-                            <option>2</option>
-                            <option>3</option>
-                            <option>4</option>
-                            <option>5</option>
+
                         </select>
                     </div>
                     <div class="form-group col-md-2">
@@ -39,7 +35,6 @@
                             </textarea>
                     </div>
                 </div>
-
             </div>
             <div class="modal-footer">
                 <div class="form-group col-md-2">
@@ -50,7 +45,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
-                <button type="button" class="btn btn-primary">Salvar</button>
+                <button type="button" class="btn btn-primary" onclick="cadastrarComanda()">Salvar</button>
             </div>
             <div class="modal-footer" id="itens">
             </div>
@@ -71,9 +66,9 @@
     var itemSelectElement = document.getElementById("comandaItens");
     var qntInputElement = document.getElementById("comandaItemQnt");
     var precoInputElement = document.getElementById("comandaItemPreco");
+    var observacaoInputElement = document.getElementById("comandaItemObservacao");
 
-
-    $("#comandaItens").change(function() {
+    $("#comandaItens").change(() => {
         let id = $(this).children(":selected").attr("id");
 
         for (var item of itens) {
@@ -85,6 +80,7 @@
     function inserirItemNaComanda() {
 
         var novoItem = {
+            id: Number($("#comandaItens").children(":selected").attr("id")),
             nome: itemSelectElement.value,
             qnt: (Number(qntInputElement.value) || 1),
             preco: Number(precoInputElement.value)
@@ -121,7 +117,7 @@
                 </div>
                 </div>
                 `;
-            valor += item.preco;
+            valor += item.preco * item.qnt;
         });
         corpoDivElement.innerHTML = corpo;
         precoTotalSpanElement.innerHTML = `R$ ${valor}`;
@@ -157,6 +153,27 @@
         }).catch((erro) => {
             alert(erro)
         });
+    }
+
+    function cadastrarComanda() {
+        var data = new FormData();
+        data.append('title', 'itensInseridosNaComanda');
+        data.append('body', itensInseridosNaComanda);
+
+        axios.post('?pagina=comanda&metodo=cadastrarViaJson', {
+                observacao: observacaoInputElement.value || "",
+                itens: itensInseridosNaComanda
+            })
+            .then(response => {
+                if (response.data.success) {
+                    alert(response.data.message);
+                } else {
+                    alert(response.data.message);
+                }
+            })
+            .catch(e => {
+                alert("erro de conexão")
+            });
     }
 </script>
 </body>

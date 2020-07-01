@@ -105,6 +105,7 @@ class ItemController
     {
         try {
             $id = (int) $_GET["id"];
+
             $this->itemApp->deletar($id);
 
             $response = (object) [

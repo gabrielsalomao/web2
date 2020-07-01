@@ -12,7 +12,9 @@ $saida = ob_get_contents();
 ob_end_clean();
 
 // para fazer request json não criar partials
-if (isset($_GET['metodo']) && ($_GET['metodo'] == 'deletar' || $_GET['metodo'] == 'obterTodos')) {
+if (isset($_GET['metodo']) && ($_GET['metodo'] == 'deletar' ||
+    $_GET['metodo'] == 'obterTodos' || $_GET['metodo'] == 'cadastrarViaJson' ||
+    $_GET['metodo'] == 'obterPorIdViaJson')) {
     echo $saida;
 } else {
     include("Views/Shared/Header.php");
