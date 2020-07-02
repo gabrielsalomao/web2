@@ -65,7 +65,7 @@
                     <li class="list-group-item">
                         <p class="card-text">
                             <?php foreach ($comanda->itens as $item) {
-                                $total += (float) $item->itemPreco  ?>
+                                $total += ((float) $item->itemPreco * (int) $item->itemQnt)  ?>
                                 <strong><?= $item->itemQnt ?>x</strong> <?= $item->itemNome ?> <br>
                             <?php
                             }
@@ -100,11 +100,11 @@
     ?>
 </div>
 
-<div class="modal fade" id="modalEditarComanda" tabindex="-1" role="dialog" aria-labelledby="modalEditarComandaLabel" aria-hidden="true">
+<div class="modal fade" id="edicaoModalComanda" tabindex="-1" role="dialog" aria-labelledby="edicaoModalComandaLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="modalEditarComandaLabel">Editar Comanda</h5>
+                <h5 class="modal-title" id="edicaoModalComandaLabel">Editar Comanda</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -112,36 +112,36 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="form-group col-md-6">
-                        <label for="item">Item</label>
-                        <select class="form-control" id="comandaItens" name="comandaItens">
+                        <label for="edicaoComandaItens">Item</label>
+                        <select class="form-control" id="edicaoComandaItens" name="edicaoComandaItens">
 
                         </select>
                     </div>
                     <div class="form-group col-md-2">
-                        <label for="comandaItemPreco">Preço</label>
-                        <input type="text" class="form-control" disabled id="comandaItemPreco" name="comandaItemPreco">
+                        <label for="edicaoComandaItemPreco">Preço</label>
+                        <input type="text" class="form-control" disabled id="edicaoComandaItemPreco" name="edicaoComandaItemPreco">
                     </div>
                     <div class="form-group col-md-2">
-                        <label for="comandaItemQnt">Qnt</label>
-                        <input type="number" class="form-control" id="comandaItemQnt" name="comandaItemQnt">
+                        <label for="edicaoComandaItemQnt">Qnt</label>
+                        <input type="number" class="form-control" id="edicaoComandaItemQnt" name="edicaoComandaItemQnt">
                     </div>
                     <div class="form-group col-md-2">
                         <label for="" style="color: white;">Salvar</label>
-                        <button onclick="inserirItemNaComanda()" class="btn btn-success form-control">
+                        <button onclick="edicaoInserirItemNaComanda()" class="btn btn-success form-control">
                             <i class="fas fa-plus"></i>
                         </button>
                     </div>
                     <div class="form-group col-md-12">
-                        <label for="comandaItemObservacao">Observação</label>
-                        <textarea name="comandaItemObservacao" id="comandaItemObservacao" class="form-control">
-                            </textarea>
+                        <label for="edicaoComandaObservacao">Observação</label>
+                        <textarea name="edicaoComandaObservacao" id="edicaoComandaObservacao" class="form-control">
+                        </textarea>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
                 <div class="form-group col-md-2">
                     <div class="row">
-                        <h5>Total: <span id="precoTotal">R$ 0.00</span></h5>
+                        <h5>Total: <span id="edicaoComandaPrecoTotal">R$ 0.00</span></h5>
                     </div>
                 </div>
             </div>
@@ -149,24 +149,8 @@
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
                 <button type="button" class="btn btn-primary" onclick="cadastrarComanda()">Salvar</button>
             </div>
-            <div class="modal-footer" id="itens">
+            <div class="modal-footer" id="edicaoItens">
             </div>
         </div>
     </div>
 </div>
-
-<script>
-    function editarComanda(id) {
-        axios.get(`?pagina=comanda&metodo=obterPorIdViaJson&id=${id}`).then((response) => {
-            if (response.data.success == true) {
-                console.log(response.data.message);
-                // location.reload();
-            } else {
-                console.log(response.data);
-            }
-        }).catch((erro) => {
-            alert(erro)
-        });
-        $('#modalEditarComanda').modal('toggle');
-    }
-</script>

@@ -59,6 +59,7 @@
 <script src="https://kit.fontawesome.com/8935557787.js" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
+<script src="js/edicaoComanda.js"></script>
 
 <script>
     var itensInseridosNaComanda = [];
@@ -69,7 +70,7 @@
     var observacaoInputElement = document.getElementById("comandaItemObservacao");
 
     $("#comandaItens").change(() => {
-        let id = $(this).children(":selected").attr("id");
+        let id = $("#comandaItens").children(":selected").attr("id");
 
         for (var item of itens) {
             if (item.id == id)
@@ -119,6 +120,7 @@
                 `;
             valor += item.preco * item.qnt;
         });
+
         corpoDivElement.innerHTML = corpo;
         precoTotalSpanElement.innerHTML = `R$ ${valor}`;
     }
@@ -167,6 +169,7 @@
             .then(response => {
                 if (response.data.success) {
                     alert(response.data.message);
+                    location.reload();
                 } else {
                     alert(response.data.message);
                 }

@@ -67,11 +67,7 @@ class ComandaApp
 
         $comanda = $this->db->executarQuery($sql)->fetch_object();
 
-        if ($comanda == 0) {
-            throw new Exception("Nenhuma comanda encontrada");
-        }
-
-        $sql = "SELECT i.nome as itemNome, ci.qnt as itemQnt, i.preco as itemPreco FROM item i 
+        $sql = "SELECT i.nome as itemNome, ci.qnt as itemQnt, i.preco as itemPreco, i.id as itemId  FROM item i 
                     JOIN comanda_item ci ON ci.itemId = i.id 
                     WHERE ci.comandaId = $comanda->id";
 
@@ -82,10 +78,6 @@ class ComandaApp
         }
 
         $comanda->itens = $itens;
-
-        if ($comanda == 0) {
-            throw new Exception("Nenhuma comanda encontrada");
-        }
 
         return $comanda;
     }
