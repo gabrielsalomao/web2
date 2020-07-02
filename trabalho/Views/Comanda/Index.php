@@ -40,6 +40,9 @@
 <div class="row card-columns">
     <?php
     $total = 0;
+
+    var_dump($usuario);
+
     foreach ($comandas as $comanda) {
     ?>
         <div class="col-md-4">

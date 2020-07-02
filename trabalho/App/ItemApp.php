@@ -87,6 +87,7 @@ class ItemApp
             if (file_exists($itemFoto))
                 unlink($itemFoto);
         }
+
         $resultado = $this->db->executarQuery($sql);
 
         if ($resultado == 0)

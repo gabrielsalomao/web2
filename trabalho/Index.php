@@ -1,5 +1,7 @@
 <?php
 
+session_start();
+
 require_once "Core.php";
 require_once "Controllers/ComandaController.php";
 require_once "Controllers/ItemController.php";
@@ -12,18 +14,14 @@ $core->start($_GET);
 $saida = ob_get_contents();
 ob_end_clean();
 
-include("Views/Login/Index.php");
-
-// // para fazer request json não criar partials
-// if (isset($_GET['metodo']) && ($_GET['metodo'] == 'deletar' ||
-//     $_GET['metodo'] == 'obterTodos' || $_GET['metodo'] == 'cadastrarViaJson' ||
-//     $_GET['metodo'] == 'obterPorIdViaJson' ||
-//     $_GET['metodo'] == 'editarViaJson')) {
-//     echo $saida;
-// } else if ($login == true) {
-//     echo $saida;
-// } else {
-//     include("Views/Shared/Header.php");
-//     echo $saida;
-//     include("Views/Shared/Footer.php");
-// }
+// para fazer request json não criar partials
+if (isset($_GET['metodo']) && ($_GET['metodo'] == 'deletar' ||
+    $_GET['metodo'] == 'obterTodos' || $_GET['metodo'] == 'cadastrarViaJson' ||
+    $_GET['metodo'] == 'obterPorIdViaJson' ||
+    $_GET['metodo'] == 'editarViaJson')) {
+    echo $saida;
+} else {
+    include("Views/Shared/Header.php");
+    echo $saida;
+    include("Views/Shared/Footer.php");
+}

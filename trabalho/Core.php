@@ -13,7 +13,11 @@ class Core
         if (isset($urlGet['pagina'])) {
             $controller = ucfirst($urlGet['pagina'] . 'Controller');
         } else {
-            $controller = 'LoginController';
+            if (!$_SESSION["usuario"]) {
+                $controller = 'ComandaController';
+            } else {
+                $controller = 'LoginController';
+            }
         }
 
         if (!class_exists($controller)) {
