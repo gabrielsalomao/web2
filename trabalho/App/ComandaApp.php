@@ -26,10 +26,27 @@ class ComandaApp
         return $resultado;
     }
 
+    function deletar($id)
+    {
+        $sql = "DELETE FROM comanda_item WHERE comandaId = $id";
+
+        $resultado = $this->db->executarQuery($sql);
+
+        if ($resultado == 0)
+            throw new Exception("Falha ao deletar comanda");
+
+        $sql = "DELETE FROM comanda WHERE id = $id";
+
+        $resultado = $this->db->executarQuery($sql);
+
+        if ($resultado == 0)
+            throw new Exception("Falha ao deletar comanda");
+    }
+
     function obterTodos()
     {
-        $sql = "SELECT c.id, c.observacao, c.status, u.nome as usuarioNome
-                FROM comanda c JOIN usuario u ON u.id = usuarioId";
+        $sql = "SELECT c.id, c.mesa, c.observacao, c.status, u.nome as usuarioNome
+                FROM comanda c JOIN usuario u ON u.id = usuarioId ORDER BY c.id DESC";
 
         $resultado = $this->db->executarQuery($sql);
 
@@ -62,7 +79,7 @@ class ComandaApp
 
     function obterComandaPorId($id)
     {
-        $sql = "SELECT c.id, c.observacao, c.status, u.nome as usuarioNome
+        $sql = "SELECT c.id, c.mesa, c.observacao, c.status, u.nome as usuarioNome
         FROM comanda c JOIN usuario u ON u.id = usuarioId WHERE c.id = $id";
 
         $comanda = $this->db->executarQuery($sql)->fetch_object();
@@ -77,17 +94,24 @@ class ComandaApp
             $itens[] = $item;
         }
 
-        $comanda->itens = $itens;
+        if (!empty($itens)) {
+            $comanda->itens = $itens;
+        }
 
         return $comanda;
     }
 
     function cadastrar($comanda)
     {
-        $sql = "INSERT INTO comanda (observacao, usuarioId)
-                VALUES ('$comanda->observacao', 1)";
+        if ($comanda->mesa == null)
+            throw new Exception("Mesa obrigatória");
+
+        $sql = "INSERT INTO comanda (observacao, mesa, usuarioId)
+                VALUES ('$comanda->observacao', $comanda->mesa, 1)";
 
         $resultado = $sql = $this->db->executarQuery($sql);
+
+
 
         if ($resultado == 0) {
             throw new Exception("falha ao cadastrar comanda");
@@ -104,6 +128,36 @@ class ComandaApp
 
                 if ($resultado == 0) {
                     throw new Exception("erro ao cadastrar itens da comanda");
+                }
+            }
+        }
+    }
+
+    function editar($comanda)
+    {
+        $sql = "UPDATE comanda SET observacao = '$comanda->observacao', 
+                status = '$comanda->status', mesa = " . ((int) $comanda->mesa ?? 0) . "
+                WHERE id = $comanda->id";
+
+        $resultado = $sql = $this->db->executarQuery($sql);
+
+        if ($resultado == 0) {
+            throw new Exception("falha ao editar comanda");
+        } else {
+            $sql = "DELETE FROM comanda_item WHERE comandaId = $comanda->id";
+
+            $resultado = $sql = $this->db->executarQuery($sql);
+
+            foreach ($comanda->itens as $item) {
+                $item = (object) $item;
+
+                $sql = "INSERT INTO comanda_item (comandaId, itemId, qnt)
+                        VALUES ($comanda->id, $item->id, $item->qnt);";
+
+                $resultado = $sql = $this->db->executarQuery($sql);
+
+                if ($resultado == 0) {
+                    throw new Exception("falha ao editar itens da comanda");
                 }
             }
         }

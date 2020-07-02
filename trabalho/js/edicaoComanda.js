@@ -4,26 +4,42 @@ var edicaoItemSelectElement = document.getElementById("edicaoComandaItens");
 var edicaoQntInputElement = document.getElementById("edicaoComandaItemQnt");
 var edicaoPrecoInputElement = document.getElementById("edicaoComandaItemPreco");
 var edicaoObservacaoInputElement = document.getElementById("edicaoComandaObservacao");
+var edicaoComandaObservacaoTextElement = document.getElementById("edicaoComandaObservacao");
+var edicaoComandaIdElement = document.getElementById("edicaoComandaId");
+var edicaoComandaStatusSelectElement = document.getElementById("edicaoComandaStatus");
+var edicaoComandaMesaInputElement = document.getElementById("edicaoComandaMesa");
 
 function editarComanda(id) {
     axios.get(`?pagina=comanda&metodo=obterPorIdViaJson&id=${id}`).then((response) => {
         if (response.data.success == true) {
             edicaoItensInseridosNaComanda = [];
-            response.data.message.itens.map((item) => {
-                let novoItem = {
-                    id: item.itemId,
-                    nome: `${item.itemNome} - R$ ${item.itemPreco}`,
-                    preco: item.itemPreco,
-                    qnt: item.itemQnt
-                };
-                console.log(item)
-                edicaoItensInseridosNaComanda.push(novoItem);
-            });
+
+            let comanda = response.data.message;
+
+            if (comanda.itens) {
+                comanda.itens.map((item) => {
+                    let novoItem = {
+                        id: item.itemId,
+                        nome: `${item.itemNome} - R$ ${item.itemPreco}`,
+                        preco: item.itemPreco,
+                        qnt: item.itemQnt
+                    };
+                    edicaoItensInseridosNaComanda.push(novoItem);
+                });
+            }
+
+            $('#edicaoComandaStatus option[value="' + comanda.status + '"]').prop('selected', true);
+
+            edicaoComandaObservacaoTextElement.innerHTML = comanda.observacao;
+            edicaoComandaIdElement.value = comanda.id;
+            edicaoComandaMesaInputElement.value = comanda.mesa;
+
             edicaoObterItens();
             edicaoConstruirCorpoDosItensSelecionados(edicaoItensInseridosNaComanda)
+
             $('#edicaoModalComanda').modal('toggle');
         } else {
-            console.log(response.data);
+            alert(response.data.message);
         }
     }).catch((erro) => {
         alert(erro)
@@ -42,11 +58,13 @@ function editarComanda(id) {
 function edicaoInserirItemNaComanda() {
 
     var novoItem = {
-        id: Number($("#edicaoItemComandaItens").children(":selected").attr("id")),
+        id: Number($("#edicaoComandaItens").children(":selected").attr("id")),
         nome: edicaoItemSelectElement.value,
         qnt: (Number(edicaoQntInputElement.value) || 1),
         preco: Number(edicaoPrecoInputElement.value)
     }
+
+    console.log(novoItem);
 
     edicaoItensInseridosNaComanda.push(novoItem);
 
@@ -61,13 +79,13 @@ function edicaoConstruirCorpoDosItensSelecionados(itens) {
 
     itens.map((item, index) => {
         corpo += `<div class="row"><div class="form-group col-md-6">
-                <input type="text" value="${item.nome}" class="form-control">
+                <input type="text" disabled value="${item.nome}" class="form-control">
             </div>
             <div class="form-group col-md-2">
-                <input type="text" value="${item.preco}" class="form-control">
+                <input type="text" disabled value="${item.preco}" class="form-control">
             </div>
             <div class="form-group col-md-2">
-                <input type="text" value="${item.qnt}" class="form-control">
+                <input type="text" disabled value="${item.qnt}" class="form-control">
             </div>
             <div class="form-group col-md-2">
                 <button onclick="edicaoDeletarItemDaComanda(${index})" class="btn btn-danger form-control">
@@ -120,24 +138,36 @@ function edicaoObterItens() {
     });
 }
 
-// function cadastrarComanda() {
-//     var data = new FormData();
-//     data.append('title', 'itensInseridosNaComanda');
-//     data.append('body', itensInseridosNaComanda);
+function deletarComanda(id) {
+    axios.get(`?pagina=comanda&metodo=deletar&id=${id}`).then((response) => {
+        if (response.data.success == true) {
+            alert(response.data.message);
+            location.reload();
+        } else {
+            alert(response.data);
+        }
+    }).catch((erro) => {
+        alert(erro)
+    });
+}
 
-//     axios.post('?pagina=comanda&metodo=cadastrarViaJson', {
-//         observacao: observacaoInputElement.value || "",
-//         itens: itensInseridosNaComanda
-//     })
-//         .then(response => {
-//             if (response.data.success) {
-//                 alert(response.data.message);
-//                 location.reload();
-//             } else {
-//                 alert(response.data.message);
-//             }
-//         })
-//         .catch(e => {
-//             alert("erro de conexão")
-//         });
-// }
+function editar() {
+
+    axios.post('?pagina=comanda&metodo=editarViaJson', {
+        id: edicaoComandaIdElement.value,
+        mesa: edicaoComandaMesaInputElement.value,
+        status: edicaoComandaStatusSelectElement.value,
+        observacao: edicaoComandaObservacaoTextElement.value || "",
+        itens: edicaoItensInseridosNaComanda
+    })
+        .then(response => {
+            if (response.data.success) {
+                location.reload();
+            } else {
+                alert(response.data.message);
+            }
+        })
+        .catch(e => {
+            alert("erro de conexão")
+        });
+}

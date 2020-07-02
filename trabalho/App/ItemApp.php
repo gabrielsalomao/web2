@@ -78,6 +78,7 @@ class ItemApp
         $sql = "UPDATE item SET nome = '$item->nome',
                 preco = $item->preco, observacao = '$item->observacao'" . ($editarImage ? ",imagem = '$item->imagem'" : "") . "
                 WHERE id = $item->id";
+
         if ($editarImage) {
             $itemApp = new ItemApp();
 

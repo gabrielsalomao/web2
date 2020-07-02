@@ -64,4 +64,50 @@ class ComandaController
             echo json_encode($response);
         }
     }
+
+    public function editarViaJson()
+    {
+        try {
+            $comanda = json_decode(file_get_contents("php://input"), true);
+
+            $this->comandaApp->editar((object) $comanda);
+
+            $response = (object) [
+                'success' => true,
+                'message' => "Comanda editada com sucesso"
+            ];
+
+            echo json_encode($response);
+        } catch (Exception $e) {
+            $response = (object) [
+                'success' => false,
+                'message' => $e->getMessage()
+            ];
+
+            echo json_encode($response);
+        }
+    }
+
+    public function deletar()
+    {
+        try {
+            $id = (int) $_GET["id"];
+
+            $this->comandaApp->deletar($id);
+
+            $response = (object) [
+                'success' => true,
+                'message' => 'Deletado com sucesso'
+            ];
+
+            echo json_encode($response);
+        } catch (Exception $e) {
+            $response = (object) [
+                'success' => false,
+                'message' => $e->getMessage()
+            ];
+
+            echo json_encode($response);
+        }
+    }
 }

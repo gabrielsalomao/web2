@@ -53,11 +53,14 @@
                                                     case "Novo":
                                                         echo "badge-primary";
                                                         break;
-                                                    case "Em preparo":
+                                                    case "Em preparo...":
                                                         echo "badge-warning";
                                                         break;
                                                     case "Concluido":
                                                         echo "badge-success";
+                                                        break;
+                                                    case "Cancelado":
+                                                        echo "badge-danger";
                                                         break;
                                                 }  ?>"> <?= $comanda->status ?></span>
                         </h4>
@@ -73,6 +76,9 @@
                         </p>
                     </li>
                     <li class="list-group-item">
+                        <strong>Mesa - <?= $comanda->mesa ?></strong>
+                    </li>
+                    <li class="list-group-item">
                         <strong>Observação</strong><br>
                         <?= $comanda->observacao ?>
                     </li>
@@ -86,7 +92,7 @@
                             </a>
                         </div>
                         <div class="form-group col-md-6">
-                            <a href="#" class="form-control btn btn-danger">
+                            <a href="#" onclick="deletarComanda(<?= $comanda->id ?>)" class="form-control btn btn-danger">
                                 <i class="fas fa-trash"></i>
                             </a>
                         </div>
@@ -104,6 +110,7 @@
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
+                <input type="hidden" id="edicaoComandaId">
                 <h5 class="modal-title" id="edicaoModalComandaLabel">Editar Comanda</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
@@ -131,10 +138,23 @@
                             <i class="fas fa-plus"></i>
                         </button>
                     </div>
-                    <div class="form-group col-md-12">
+                    <div class="form-group col-md-7">
                         <label for="edicaoComandaObservacao">Observação</label>
                         <textarea name="edicaoComandaObservacao" id="edicaoComandaObservacao" class="form-control">
                         </textarea>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="edicaoComandaStatus">Status</label>
+                        <select class="form-control" id="edicaoComandaStatus" name="edicaoComandaStatus">
+                            <option value="Novo">Novo</option>
+                            <option value="Em preparo...">Em preparo...</option>
+                            <option value="Concluido">Concluido</option>
+                            <option value="Cancelado">Cancelado</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="edicaoComandaMesa">Mesa</label>
+                        <input type="number" class="form-control" id="edicaoComandaMesa" name="edicaoComandaMesa">
                     </div>
                 </div>
             </div>
@@ -147,7 +167,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
-                <button type="button" class="btn btn-primary" onclick="cadastrarComanda()">Salvar</button>
+                <button type="button" class="btn btn-primary" onclick="editar()">Editar</button>
             </div>
             <div class="modal-footer" id="edicaoItens">
             </div>

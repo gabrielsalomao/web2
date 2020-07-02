@@ -29,10 +29,14 @@
                             <i class="fas fa-plus"></i>
                         </button>
                     </div>
-                    <div class="form-group col-md-12">
+                    <div class="form-group col-md-10">
                         <label for="comandaItemObservacao">Observação</label>
                         <textarea name="comandaItemObservacao" id="comandaItemObservacao" class="form-control">
                             </textarea>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="comandaItemMesa">Mesa</label>
+                        <input type="number" class="form-control" id="comandaItemMesa" name="comandaItemMesa">
                     </div>
                 </div>
             </div>
@@ -59,7 +63,7 @@
 <script src="https://kit.fontawesome.com/8935557787.js" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
-<script src="js/edicaoComanda.js"></script>
+<script src="js/edicaoComanda.js?v=1"></script>
 
 <script>
     var itensInseridosNaComanda = [];
@@ -68,6 +72,7 @@
     var qntInputElement = document.getElementById("comandaItemQnt");
     var precoInputElement = document.getElementById("comandaItemPreco");
     var observacaoInputElement = document.getElementById("comandaItemObservacao");
+    var comandaItemMesaInputElement = document.getElementById("comandaItemMesa");
 
     $("#comandaItens").change(() => {
         let id = $("#comandaItens").children(":selected").attr("id");
@@ -100,13 +105,13 @@
 
         itens.map((item, index) => {
             corpo += `<div class="row"><div class="form-group col-md-6">
-                    <input type="text" value="${item.nome}" class="form-control">
+                    <input type="text" disabled value="${item.nome}" class="form-control">
                 </div>
                 <div class="form-group col-md-2">
-                    <input type="text" value="${item.preco}" class="form-control">
+                    <input type="text" disabled value="${item.preco}" class="form-control">
                 </div>
                 <div class="form-group col-md-2">
-                    <input type="text" value="${item.qnt}" class="form-control">
+                    <input type="text" disabled value="${item.qnt}" class="form-control">
                 </div>
                 <div class="form-group col-md-2">
                     <button onclick="deletarItemDaComanda(${index})" class="btn btn-danger form-control">
@@ -163,6 +168,7 @@
         data.append('body', itensInseridosNaComanda);
 
         axios.post('?pagina=comanda&metodo=cadastrarViaJson', {
+                mesa: comandaItemMesaInputElement.value,
                 observacao: observacaoInputElement.value || "",
                 itens: itensInseridosNaComanda
             })
