@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 29-Jun-2020 às 22:58
+-- Tempo de geração: 03-Jul-2020 às 20:49
 -- Versão do servidor: 10.4.13-MariaDB
 -- versão do PHP: 7.2.31
 
@@ -30,8 +30,9 @@ SET time_zone = "+00:00";
 CREATE TABLE `comanda` (
   `id` int(11) NOT NULL,
   `observacao` text DEFAULT NULL,
-  `precoTotal` decimal(10,0) NOT NULL,
-  `usuarioId` int(11) NOT NULL
+  `usuarioId` int(11) NOT NULL,
+  `status` varchar(50) NOT NULL DEFAULT 'Novo',
+  `mesa` int(99) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -42,7 +43,8 @@ CREATE TABLE `comanda` (
 
 CREATE TABLE `comanda_item` (
   `comandaId` int(11) NOT NULL,
-  `itemId` int(11) NOT NULL
+  `itemId` int(11) NOT NULL,
+  `qnt` int(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -56,7 +58,7 @@ CREATE TABLE `item` (
   `nome` varchar(200) NOT NULL,
   `observacao` text NOT NULL,
   `preco` decimal(10,0) NOT NULL,
-  `imagem` varchar(1000) NOT NULL,
+  `imagem` varchar(1000) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -72,6 +74,13 @@ CREATE TABLE `usuario` (
   `senha` varchar(100) NOT NULL,
   `tipo` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Extraindo dados da tabela `usuario`
+--
+
+INSERT INTO `usuario` (`id`, `nome`, `email`, `senha`, `tipo`) VALUES
+(4, 'Admin', 'admin@admin', '@Senha01', 'Admin');
 
 --
 -- Índices para tabelas despejadas
@@ -111,19 +120,19 @@ ALTER TABLE `usuario`
 -- AUTO_INCREMENT de tabela `comanda`
 --
 ALTER TABLE `comanda`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=57;
 
 --
 -- AUTO_INCREMENT de tabela `item`
 --
 ALTER TABLE `item`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
 
 --
 -- AUTO_INCREMENT de tabela `usuario`
 --
 ALTER TABLE `usuario`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- Restrições para despejos de tabelas
