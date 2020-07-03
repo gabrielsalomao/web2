@@ -9,12 +9,11 @@
 <div class="col-md-12">
     <div class="row">
         <div class="col-md-12" style="margin-bottom: 1rem;">
-            <a href="?pagina=item&metodo=cadastrar" class="btn btn-success">Novo</a>
+            <a href="?pagina=item&metodo=cadastrar" class="btn btn-success">Novo item</a>
         </div>
     </div>
     <div class="row">
         <?php if (empty($itens)) {
-            echo "<h1>Nenhum item encontrado</h1>";
         } else {
             foreach ($itens as $item) {
         ?>

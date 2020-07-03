@@ -1,7 +1,5 @@
 <?php
 
-session_start();
-
 require_once "Core.php";
 require_once "Controllers/ComandaController.php";
 require_once "Controllers/ItemController.php";
@@ -15,10 +13,10 @@ $saida = ob_get_contents();
 ob_end_clean();
 
 // para fazer request json não criar partials
-if (isset($_GET['metodo']) && ($_GET['metodo'] == 'deletar' ||
+if ((isset($_GET['metodo']) && ($_GET['metodo'] == 'deletar' ||
     $_GET['metodo'] == 'obterTodos' || $_GET['metodo'] == 'cadastrarViaJson' ||
     $_GET['metodo'] == 'obterPorIdViaJson' ||
-    $_GET['metodo'] == 'editarViaJson')) {
+    $_GET['metodo'] == 'editarViaJson')) || !isset($_COOKIE['usuario'])) {
     echo $saida;
 } else {
     include("Views/Shared/Header.php");

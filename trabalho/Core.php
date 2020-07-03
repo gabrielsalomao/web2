@@ -11,12 +11,16 @@ class Core
         }
 
         if (isset($urlGet['pagina'])) {
-            $controller = ucfirst($urlGet['pagina'] . 'Controller');
-        } else {
-            if (!$_SESSION["usuario"]) {
-                $controller = 'ComandaController';
-            } else {
+            if (!isset($_COOKIE['usuario']) || $_COOKIE['usuario'] == NULL) {
                 $controller = 'LoginController';
+            } else {
+                $controller = ucfirst($urlGet['pagina'] . 'Controller');
+            }
+        } else {
+            if (!isset($_COOKIE['usuario']) || $_COOKIE['usuario'] == NULL) {
+                $controller = 'LoginController';
+            } else {
+                $controller = 'ComandaController';
             }
         }
 

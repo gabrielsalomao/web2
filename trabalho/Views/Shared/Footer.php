@@ -169,6 +169,12 @@
         data.append('body', itensInseridosNaComanda);
 
         axios.post('?pagina=comanda&metodo=cadastrarViaJson', {
+                usuarioId: <?php
+                            if (isset($_COOKIE['usuario'])) {
+                                $usuario = json_decode($_COOKIE['usuario'], true);
+                                echo $usuario["id"];
+                            }
+                            ?>,
                 mesa: comandaItemMesaInputElement.value,
                 observacao: observacaoInputElement.value || "",
                 itens: itensInseridosNaComanda
@@ -184,6 +190,11 @@
             .catch(e => {
                 alert("erro de conexão")
             });
+    }
+
+    function logout() {
+        document.cookie = "usuario=; expires = Thu, 01 Jan 1970 00:00:00 GMT"
+        location.reload();
     }
 </script>
 </body>

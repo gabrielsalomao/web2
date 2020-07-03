@@ -71,7 +71,8 @@ class ItemController
             }
 
             $this->itemApp->editar($item);
-            Header("Location: index.php?pagina=item&metodo=index");
+
+            header("Location: index.php?pagina=item&metodo=index");
         } catch (Exception $e) {
             echo $e->getMessage();
         }
@@ -95,7 +96,7 @@ class ItemController
 
             $itens = $this->itemApp->obterTodos();
 
-            Header("Location: index.php?pagina=item&metodo=index");
+            header("Location: index.php?pagina=item&metodo=index");
         } catch (Exception $e) {
             echo $e->getMessage();
         }

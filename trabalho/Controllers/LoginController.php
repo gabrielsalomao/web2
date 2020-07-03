@@ -14,7 +14,12 @@ class LoginController
 
     public function index()
     {
-        include("Views/Login/Index.php");
+        try {
+
+            include("Views/Login/Index.php");
+        } catch (Exception $e) {
+            echo $e->getMessage();
+        }
     }
 
     public function realizarLogin()
@@ -22,14 +27,13 @@ class LoginController
         try {
             $usuario = $this->loginApp->obterUsuarioLogin($_POST["loginEmail"], $_POST["loginSenha"]);
 
+            setcookie('usuario', json_encode($usuario));
 
-            // call_user_func(array(new ComandaController(), "index"));
-
-            Header("Location: index.php?pagina=comanda&metodo=index");
-            $_SESSION["usuario"] = $usuario;
+            header("Location: index.php?pagina=comanda&metodo=index");
         } catch (Exception $e) {
-            echo $e->getMessage();
-            Header("Location: Views/Login/index.php");
+            $errorMessage = $e->getMessage();
+
+            include("Views/Login/Index.php");
         }
     }
 }

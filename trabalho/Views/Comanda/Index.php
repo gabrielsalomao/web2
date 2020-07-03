@@ -16,7 +16,7 @@
         border-radius: inherit;
         transition: opacity .3s, transform .3s;
         animation: pulse-animation 1s cubic-bezier(0.24, 0, 0.38, 1) infinite;
-        z-index: -1;
+        z-index: 0;
     }
 
     @keyframes pulse-animation {
@@ -36,17 +36,14 @@
         }
     }
 </style>
-
 <div class="row card-columns">
     <?php
     $total = 0;
 
-    var_dump($usuario);
-
     foreach ($comandas as $comanda) {
     ?>
-        <div class="col-md-4">
-            <div class="card box-shadow <?php if ($comanda->status == "Novo") echo "pulse" ?>">
+        <div class="col-md-4 ">
+            <div class="card box-shadow  <?php if ($comanda->status == "Novo") echo "pulse" ?>">
                 <div class="card-header">
                     <strong><?= $comanda->id ?></strong>
                 </div>

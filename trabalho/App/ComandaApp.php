@@ -107,7 +107,7 @@ class ComandaApp
             throw new Exception("Mesa obrigatória");
 
         $sql = "INSERT INTO comanda (observacao, mesa, usuarioId)
-                VALUES ('$comanda->observacao', $comanda->mesa, 1)";
+                VALUES ('$comanda->observacao', $comanda->mesa, $comanda->usuarioId)";
 
         $resultado = $sql = $this->db->executarQuery($sql);
 

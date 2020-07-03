@@ -15,6 +15,7 @@ class ComandaController
     {
         try {
             $comandas = $this->comandaApp->obterTodos();
+
             include("Views/Comanda/Index.php");
         } catch (Exception $e) {
             echo $e->getMessage();

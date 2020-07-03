@@ -15,12 +15,12 @@ class LoginApp
     {
         $sql = "SELECT * FROM usuario WHERE email = '$email' AND senha = '$senha'";
 
-        $resultado = $this->db->executarQuery($sql)->fetch_object();
+        $usuario = $this->db->executarQuery($sql)->fetch_object();
 
-        if (empty($resultado)) {
-            throw new Exception("Usuário não encontrado");
+        if (empty($usuario)) {
+            throw new Exception("E-Mail ou senha inválido");
         }
 
-        var_dump($resultado);
+        return $usuario;
     }
 }
