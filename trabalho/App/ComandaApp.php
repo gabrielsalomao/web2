@@ -55,7 +55,8 @@ class ComandaApp
         while ($comanda = $resultado->fetch_object()) {
             $itens = array();
 
-            $sql = "SELECT i.nome as itemNome, ci.qnt as itemQnt, i.preco as itemPreco FROM item i 
+            $sql = "SELECT i.nome as itemNome, ci.qnt as itemQnt,
+            i.preco as itemPreco FROM item i 
             JOIN comanda_item ci ON ci.itemId = i.id 
             WHERE ci.comandaId = $comanda->id";
 
@@ -84,9 +85,10 @@ class ComandaApp
 
         $comanda = $this->db->executarQuery($sql)->fetch_object();
 
-        $sql = "SELECT i.nome as itemNome, ci.qnt as itemQnt, i.preco as itemPreco, i.id as itemId  FROM item i 
-                    JOIN comanda_item ci ON ci.itemId = i.id 
-                    WHERE ci.comandaId = $comanda->id";
+        $sql = "SELECT i.nome as itemNome, ci.qnt as itemQnt,
+                i.preco as itemPreco, i.id as itemId  FROM item i 
+                JOIN comanda_item ci ON ci.itemId = i.id 
+                WHERE ci.comandaId = $comanda->id";
 
         $itensResult = $this->db->executarQuery($sql);
 
@@ -110,8 +112,6 @@ class ComandaApp
                 VALUES ('$comanda->observacao', $comanda->mesa, $comanda->usuarioId)";
 
         $resultado = $sql = $this->db->executarQuery($sql);
-
-
 
         if ($resultado == 0) {
             throw new Exception("falha ao cadastrar comanda");
