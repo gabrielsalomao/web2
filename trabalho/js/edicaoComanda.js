@@ -120,12 +120,10 @@ function edicaoObterItens() {
         let edicaoSelectOption = "";
 
         for (let item of edicaoItens) {
-            console.log(item)
             edicaoSelectOption += `<option id="${item.id}">${item.nome} - R$ ${item.preco}</option>`;
         }
 
         edicaoItemSelectElement.innerHTML = edicaoSelectOption;
-        console.log(edicaoSelectOption)
 
         let id = $("#edicaoComandaItens").children(":selected").attr("id");
 
